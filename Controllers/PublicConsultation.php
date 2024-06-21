@@ -13,7 +13,7 @@ class PublicConsultation extends \MapasCulturais\Controller
 
         $app = App::i();
 
-        $public_consultations = $app->repo('PublicConsultation\Entities\PublicConsultation')->findAll();
+        $public_consultations = $app->repo('PublicConsultation\Entities\PublicConsultation')->findBy([], ['id' => 'desc']);
 
         $this->render('index', ['public_consultations' => $public_consultations]);
     }

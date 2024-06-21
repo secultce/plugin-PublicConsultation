@@ -29,7 +29,7 @@ $this->layout = 'panel';
                 </div>
                 <div class="objeto-meta">
                     <span class="label" style="word-wrap: break-word;">
-                        <a href="">
+                        <a href="<?php echo $public_consultation->googleDocsLink; ?>" target="_blank">
                             <?php echo $public_consultation->googleDocsLink; ?>
                         </a>
                     </span>

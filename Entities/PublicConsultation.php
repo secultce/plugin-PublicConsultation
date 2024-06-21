@@ -15,6 +15,9 @@ use MapasCulturais\App;
  */
 class PublicConsultation extends \MapasCulturais\Entity
 {
+    const UNPUBLISHED_STATUS = 0;
+    const PUBLISHED_STATUS = 1;
+
     /**
      * @var integer
      *
@@ -45,6 +48,13 @@ class PublicConsultation extends \MapasCulturais\Entity
      * @ORM\Column(name="google_docs_link", type="string", nullable=false)
      */
     protected $googleDocsLink;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="smallint", nullable=false)
+     */
+    protected $status = self::PUBLISHED_STATUS;
 
     /**
      * @var \MapasCulturais\Entities\Agent

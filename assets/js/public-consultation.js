@@ -6,7 +6,7 @@ $(() => {
 
         setTimeout(() => {
             $(this).unbind('submit').submit()
-        }, 1000)
+        }, 1500)
 
     })
 })

@@ -11,6 +11,7 @@ return [
             title VARCHAR(255) NOT NULL,
             subtitle TEXT NOT NULL,
             google_docs_link VARCHAR(255) NOT NULL,
+            status SMALLINT NOT NULL,
             agent_id INT NOT NULL,
             create_timestamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
             PRIMARY KEY(id));"
