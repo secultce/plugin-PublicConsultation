@@ -14,10 +14,17 @@ class Plugin extends \MapasCulturais\Plugin
         $app->hook('template(<<*>>.nav.panel.accountability):after', function () {
             $this->part('panel-nav-item');
         });
+
+        $app->hook('GET(consulta-publica.create):before', function () use ($app) {
+            $app->view->enqueueScript('app', 'public_consultation', 'js/public-consultation.js');
+            $app->view->enqueueStyle('app', 'public_consultation', 'css/public-consultation.css');
+        });
     }
 
     public function register()
     {
-        // 
+        $app = App::i();
+
+        $app->registerController('consulta-publica', Controllers\PublicConsultation::class);
     }
 }

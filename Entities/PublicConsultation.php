@@ -2,16 +2,18 @@
 
 namespace PublicConsultation\Entities;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use MapasCulturais\App;
 
 /**
  * Link 
  * 
- * @ORM\Table(name="public_consultation_link")
+ * @ORM\Table(name="public_consultation")
  * @ORM\Entity
- * @ORM\entity(repositoryClass="MapasCulturais\Repository")
+ * @ORM\entity(repositoryClass="PublicConsultation\Repositories\PublicConsultation")
  */
-class Link extends \MapasCulturais\Entity
+class PublicConsultation extends \MapasCulturais\Entity
 {
     /**
      * @var integer
@@ -19,7 +21,7 @@ class Link extends \MapasCulturais\Entity
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="public_consultation_link_id_seq", allocationSize=1, initialValue=1)
+     * @ORM\SequenceGenerator(sequenceName="public_consultation_id_seq", allocationSize=1, initialValue=1)
      */
     protected $id;
 
@@ -60,4 +62,17 @@ class Link extends \MapasCulturais\Entity
      * @ORM\Column(name="create_timestamp", type="datetime", nullable=false)
      */
     protected $createTimestamp;
+
+    public function create($data)
+    {
+        $app = App::i();
+
+        $this->title = $data["title"];
+        $this->subtitle = $data["subtitle"];
+        $this->googleDocsLink = $data["google_docs_link"];
+        $this->owner = $app->getUser()->profile;
+        $this->createTimestamp = new DateTime();
+
+        $this->save(true);
+    }
 }

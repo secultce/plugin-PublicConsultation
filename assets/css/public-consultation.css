@@ -1,0 +1,15 @@
+.creation-alert {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: none;
+}
+
+.required-field {
+    color: darkred;
+}
+
+.form-field {
+    width: 100%;
+    margin-bottom: 10px;
+}
