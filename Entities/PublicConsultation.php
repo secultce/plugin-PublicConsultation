@@ -73,6 +73,13 @@ class PublicConsultation extends \MapasCulturais\Entity
      */
     protected $createTimestamp;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="update_timestamp", type="datetime", nullable=true)
+     */
+    protected $updateTimestamp;
+
     public function create($data)
     {
         $app = App::i();
@@ -82,6 +89,20 @@ class PublicConsultation extends \MapasCulturais\Entity
         $this->googleDocsLink = $data["google_docs_link"];
         $this->owner = $app->getUser()->profile;
         $this->createTimestamp = new DateTime();
+
+        $this->save(true);
+    }
+
+    public function update($data)
+    {
+        $app = App::i();
+
+        $this->title = $data["title"];
+        $this->subtitle = $data["subtitle"];
+        $this->googleDocsLink = $data["google_docs_link"];
+        $this->status = (int) $data["status"];
+        $this->owner = $app->getUser()->profile;
+        $this->updateTimestamp = new DateTime();
 
         $this->save(true);
     }

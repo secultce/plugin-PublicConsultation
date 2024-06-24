@@ -1,15 +1,11 @@
 $(() => {
-    $('#create-public-consultation-form').on('submit', function (event) {
+    $('#create-public-consultation-form, #edit-public-consultation-form').on('submit', event => {
         event.preventDefault()
 
         $.ajax({
             type: "POST",
-            url: MapasCulturais.createUrl('consulta-publica', 'store'),
-            data: {
-                title: $("[name='title']").val(),
-                subtitle: $("[name='subtitle']").val(),
-                google_docs_link: $("[name='google_docs_link']").val(),
-            },
+            url: MapasCulturais.createUrl('consulta-publica', event.currentTarget.dataset.action),
+            data: getData(event),
             dataType: "json",
             success(res) {
                 successAlert(res.message)
@@ -30,13 +26,13 @@ $(() => {
 })
 
 const errorAlert = (message, cssClass) => {
-    $('#create-public-consultation-alerts')
+    $('.public-consultation-alerts')
         .text(message)
         .addClass(cssClass)
         .fadeIn("slow")
 
     setTimeout(() => {
-        $('#create-public-consultation-alerts')
+        $('.public-consultation-alerts')
             .hide()
             .empty()
             .removeClass(cssClass)
@@ -46,7 +42,7 @@ const errorAlert = (message, cssClass) => {
 const successAlert = (message) => {
     const url = MapasCulturais.createUrl('consulta-publica', 'index')
 
-    $('#create-public-consultation-alerts')
+    $('.public-consultation-alerts')
         .empty()
         .text(message)
         .removeClass('warning danger')
@@ -56,4 +52,19 @@ const successAlert = (message) => {
     setTimeout(() => {
         window.location.replace(url)
     }, 2000)
+}
+
+const getData = (event) => {
+    let data = {
+        title: $("[name='title']").val(),
+        subtitle: $("[name='subtitle']").val(),
+        google_docs_link: $("[name='google_docs_link']").val(),
+    }
+
+    if (event.currentTarget.dataset.action === 'update') {
+        data.id = event.currentTarget.dataset.publicConsultationId
+        data.status = $("[name='status']").val()
+    }
+
+    return data
 }

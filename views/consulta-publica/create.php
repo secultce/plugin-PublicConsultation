@@ -5,7 +5,7 @@ $this->layout = 'panel';
 ?>
 
 <div class="panel-list panel-main-content">
-    <div class="alert creation-alert" id="create-public-consultation-alerts"></div>
+    <div class="alert public-consultation-alerts"></div>
 
     <header class="panel-header clearfix">
         <h2>
@@ -14,21 +14,27 @@ $this->layout = 'panel';
     </header>
 
     <div>
-        <form action="<?php echo $app->createUrl('consulta-publica', 'store') ?>" method="post" id="create-public-consultation-form">
-            <label for="title">
-                Título: <span class="required-field">*</span>
-            </label>
-            <input type="text" name="title" placeholder="Insira o título" required class="form-field">
+        <form action="<?php echo $app->createUrl('consulta-publica', 'store') ?>" data-action="store" method="post" id="create-public-consultation-form">
+            <div>
+                <label for="title">
+                    Título: <span class="required-field">*</span>
+                </label>
+                <input type="text" name="title" placeholder="Insira o título" required class="form-field">
+            </div>
 
-            <label for="subtitle">
-                Subtítulo: <span class="required-field">*</span>
-            </label>
-            <textarea name="subtitle" placeholder="Insira o subtítulo" class="form-field" required></textarea>
+            <div>
+                <label for="subtitle">
+                    Subtítulo: <span class="required-field">*</span>
+                </label>
+                <textarea name="subtitle" placeholder="Insira o subtítulo" class="form-field" required></textarea>
+            </div>
 
-            <label for="google_docs_link">
-                Link do Google Docs: <span class="required-field">*</span>
-            </label>
-            <input type="text" name="google_docs_link" placeholder="Insira o link do Google Docs" required class="form-field">
+            <div>
+                <label for="google_docs_link">
+                    Link do Google Docs: <span class="required-field">*</span>
+                </label>
+                <input type="text" name="google_docs_link" required placeholder="Insira o link do Google Docs" class="form-field">
+            </div>
 
             <button type="submit" class="btn btn-primary" id="create-public-consultation-btn">Publicar</button>
         </form>

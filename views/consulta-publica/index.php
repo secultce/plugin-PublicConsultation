@@ -35,7 +35,7 @@ $this->layout = 'panel';
                     </span>
                 </div>
                 <div class="entity-actions">
-                    <a class="btn btn-small btn-primary" href="">editar</a>
+                    <a class="btn btn-small btn-primary" href="<?php echo $app->createUrl('consulta-publica', 'edit', ['id' => $public_consultation->id]); ?>">editar</a>
                     <a class="btn btn-small btn-danger" href="">excluir</a>
                 </div>
             </article>

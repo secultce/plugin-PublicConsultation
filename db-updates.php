@@ -14,6 +14,7 @@ return [
             status SMALLINT NOT NULL,
             agent_id INT NOT NULL,
             create_timestamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+            update_timestamp TIMESTAMP(0) WITHOUT TIME ZONE,
             PRIMARY KEY(id));"
         );
     },
