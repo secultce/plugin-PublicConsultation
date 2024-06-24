@@ -28,11 +28,15 @@ class PublicConsultation extends \MapasCulturais\Controller
     {
         $this->requireAuthentication();
 
-        $app = App::i();
+        $data = $this->data;
+
+        if (!$data["title"] || !$data["subtitle"] || !$data["google_docs_link"]) {
+            $this->json(['message' => 'Preencha todos os campos'], 400);
+        }
 
         $public_consultation_entity = new PublicConsultationEntity();
-        $public_consultation_entity->create($this->data);
+        $public_consultation_entity->create($data);
 
-        $app->redirect($app->createUrl('consulta-publica', 'index'));
+        $this->json(['message' => 'Consulta Pública cadastrada com sucesso. Aguarde.']);
     }
 }
