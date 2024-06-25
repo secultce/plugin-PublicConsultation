@@ -2,6 +2,8 @@ $(() => {
     $('#create-public-consultation-form, #edit-public-consultation-form').on('submit', event => {
         event.preventDefault()
 
+        $('#create-public-consultation-btn, #edit-public-consultation-btn').attr("disabled", true)
+
         $.ajax({
             type: "POST",
             url: MapasCulturais.createUrl('consulta-publica', event.currentTarget.dataset.action),
@@ -20,6 +22,8 @@ $(() => {
                 }
 
                 errorAlert(message, cssClass)
+
+                $('#create-public-consultation-btn, #edit-public-consultation-btn').attr("disabled", false)
             }
         })
     })

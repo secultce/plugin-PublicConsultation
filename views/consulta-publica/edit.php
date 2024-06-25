@@ -53,7 +53,7 @@ $this->layout = 'panel';
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="submit" class="btn btn-primary" id="edit-public-consultation-btn">Salvar</button>
         </form>
     </div>
 </div>
