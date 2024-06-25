@@ -15,7 +15,7 @@ class Plugin extends \MapasCulturais\Plugin
             $this->part('panel-nav-item');
         });
 
-        $app->hook('GET(consulta-publica.<<create|edit>>):before', function () use ($app) {
+        $app->hook('GET(consulta-publica.<<*>>):before', function () use ($app) {
             $app->view->enqueueScript('app', 'public_consultation', 'js/public-consultation.js');
             $app->view->enqueueStyle('app', 'public_consultation', 'css/public-consultation.css');
         });

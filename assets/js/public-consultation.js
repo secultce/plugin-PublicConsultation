@@ -23,6 +23,39 @@ $(() => {
             }
         })
     })
+
+    $('#del-public-consultation-btn').on('click', (event) => {
+        Swal.fire({
+            title: "Deletar Consulta Pública?",
+            text: "Essa ação não poderá ser desfeita.",
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Confirmar",
+            reverseButtons: true
+        }).then(res => {
+            if (res.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: MapasCulturais.createUrl('consulta-publica', 'delete'),
+                    data: {
+                        id: event.currentTarget.dataset.publicConsultationId
+                    },
+                    dataType: "json",
+                    success(res) {
+                        $(event.currentTarget).parents('#public-consultation-wrapper').remove()
+
+                        successAlert(res.message)
+                    },
+                    error() {
+                        const message = 'Ocorreu algum erro. Verifique e tente novamente.'
+                        const cssClass = 'danger'
+
+                        errorAlert(message, cssClass)
+                    }
+                })
+            }
+        })
+    })
 })
 
 const errorAlert = (message, cssClass) => {

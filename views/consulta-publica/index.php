@@ -5,6 +5,8 @@ $this->layout = 'panel';
 ?>
 
 <div class="panel-list panel-main-content">
+    <div class="alert public-consultation-alerts"></div>
+
     <header class="panel-header clearfix">
         <h2>
             <?php \MapasCulturais\i::_e("Consultas Públicas"); ?>
@@ -16,7 +18,7 @@ $this->layout = 'panel';
 
     <?php if ($public_consultations) : ?>
         <?php foreach ($public_consultations as $public_consultation) : ?>
-            <article class="objeto clearfix">
+            <article class="objeto clearfix" id="public-consultation-wrapper">
                 <h1>
                     <a href="">
                         <?php echo $public_consultation->title; ?>
@@ -35,8 +37,12 @@ $this->layout = 'panel';
                     </span>
                 </div>
                 <div class="entity-actions">
-                    <a class="btn btn-small btn-primary" href="<?php echo $app->createUrl('consulta-publica', 'edit', ['id' => $public_consultation->id]); ?>">editar</a>
-                    <a class="btn btn-small btn-danger" href="">excluir</a>
+                    <a class="btn btn-small btn-primary" href="<?php echo $app->createUrl('consulta-publica', 'edit', ['id' => $public_consultation->id]); ?>">
+                        editar
+                    </a>
+                    <button class="btn btn-small btn-danger" id="del-public-consultation-btn" data-public-consultation-id="<?php echo $public_consultation->id; ?>">
+                        excluir
+                    </button>
                 </div>
             </article>
         <?php endforeach; ?>

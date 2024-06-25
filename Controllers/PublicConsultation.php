@@ -71,4 +71,18 @@ class PublicConsultation extends \MapasCulturais\Controller
 
         $this->json(['message' => 'Consulta Pública atualizada com sucesso. Aguarde.']);
     }
+
+    public function POST_delete()
+    {
+        $this->requireAuthentication();
+
+        $app = App::i();
+
+        $id = (int) $this->data["id"];
+        $public_consultation = current($app->repo('PublicConsultation\Entities\PublicConsultation')->findBy(['id' => $id]));
+
+        $public_consultation->delete(true);
+
+        $this->json(['message' => 'Consulta Pública deletada com sucesso. Aguarde.']);
+    }
 }
