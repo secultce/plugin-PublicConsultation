@@ -15,9 +15,6 @@ use MapasCulturais\App;
  */
 class PublicConsultation extends \MapasCulturais\Entity
 {
-    const UNPUBLISHED_STATUS = 0;
-    const PUBLISHED_STATUS = 1;
-
     /**
      * @var integer
      *
@@ -54,7 +51,7 @@ class PublicConsultation extends \MapasCulturais\Entity
      *
      * @ORM\Column(name="status", type="smallint", nullable=false)
      */
-    protected $status = self::PUBLISHED_STATUS;
+    protected $status = self::STATUS_ENABLED;
 
     /**
      * @var \MapasCulturais\Entities\Agent
@@ -101,6 +98,17 @@ class PublicConsultation extends \MapasCulturais\Entity
         $this->subtitle = $data["subtitle"];
         $this->googleDocsLink = $data["google_docs_link"];
         $this->status = (int) $data["status"];
+        $this->owner = $app->getUser()->profile;
+        $this->updateTimestamp = new DateTime();
+
+        $this->save(true);
+    }
+
+    public function trash()
+    {
+        $app = App::i();
+
+        $this->status = self::STATUS_TRASH;
         $this->owner = $app->getUser()->profile;
         $this->updateTimestamp = new DateTime();
 

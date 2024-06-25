@@ -20,7 +20,7 @@
         <a class="btn btn-small btn-primary" href="<?php echo $app->createUrl('consulta-publica', 'edit', ['id' => $public_consultation->id]); ?>">
             editar
         </a>
-        <button class="btn btn-small btn-danger" id="del-public-consultation-btn" data-public-consultation-id="<?php echo $public_consultation->id; ?>">
+        <button class="btn btn-small btn-danger" del-public-consultation-btn data-public-consultation-id="<?php echo $public_consultation->id; ?>">
             excluir
         </button>
     </div>

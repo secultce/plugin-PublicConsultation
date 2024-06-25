@@ -16,6 +16,7 @@ $(() => {
                 let message = 'Ocorreu algum erro. Verifique e tente novamente.'
                 let cssClass = 'danger'
 
+                // Ocorre na validação do back-end dos campos obrigatórios
                 if (err.status === 400) {
                     message = err.responseJSON.message
                     cssClass = 'warning'
@@ -28,7 +29,7 @@ $(() => {
         })
     })
 
-    $('#del-public-consultation-btn').on('click', (event) => {
+    $('[del-public-consultation-btn]').on('click', (event) => {
         Swal.fire({
             title: "Deletar Consulta Pública?",
             text: "Essa ação não poderá ser desfeita.",
@@ -40,7 +41,7 @@ $(() => {
             if (res.isConfirmed) {
                 $.ajax({
                     type: "POST",
-                    url: MapasCulturais.createUrl('consulta-publica', 'delete'),
+                    url: MapasCulturais.createUrl('consulta-publica', 'trash'),
                     data: {
                         id: event.currentTarget.dataset.publicConsultationId
                     },

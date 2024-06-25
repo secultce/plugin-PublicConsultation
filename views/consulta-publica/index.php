@@ -6,11 +6,11 @@ use PublicConsultation\Entities\PublicConsultation;
 $this->layout = 'panel';
 
 $actives = array_filter($public_consultations, function ($value, $key) {
-    return $value->status === PublicConsultation::PUBLISHED_STATUS;
+    return $value->status === PublicConsultation::STATUS_ENABLED;
 }, ARRAY_FILTER_USE_BOTH);
 
 $inactives = array_filter($public_consultations, function ($value, $key) {
-    return $value->status === PublicConsultation::UNPUBLISHED_STATUS;
+    return $value->status === PublicConsultation::STATUS_DISABLED;
 }, ARRAY_FILTER_USE_BOTH);
 
 ?>

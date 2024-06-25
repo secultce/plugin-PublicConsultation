@@ -44,10 +44,10 @@ $this->layout = 'panel';
                 </label><br>
                 <select name="status" required>
                     <option value="" disabled>Selecione um status</option>
-                    <option value="1" <?php if ($public_consultation->status === PublicConsultation::PUBLISHED_STATUS) : echo 'selected'; endif; ?>>
+                    <option value="1" <?php if ($public_consultation->status === PublicConsultation::STATUS_ENABLED) : echo 'selected'; endif; ?>>
                         Publicada
                     </option>
-                    <option value="0" <?php if ($public_consultation->status === PublicConsultation::UNPUBLISHED_STATUS) : echo 'selected'; endif; ?>>
+                    <option value="-9" <?php if ($public_consultation->status === PublicConsultation::STATUS_DISABLED) : echo 'selected'; endif; ?>>
                         Não Publicada
                     </option>
                 </select>

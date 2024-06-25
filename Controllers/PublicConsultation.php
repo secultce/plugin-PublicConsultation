@@ -72,7 +72,7 @@ class PublicConsultation extends \MapasCulturais\Controller
         $this->json(['message' => 'Consulta Pública atualizada com sucesso. Aguarde.']);
     }
 
-    public function POST_delete()
+    public function POST_trash()
     {
         $this->requireAuthentication();
 
@@ -81,7 +81,7 @@ class PublicConsultation extends \MapasCulturais\Controller
         $id = (int) $this->data["id"];
         $public_consultation = current($app->repo('PublicConsultation\Entities\PublicConsultation')->findBy(['id' => $id]));
 
-        $public_consultation->delete(true);
+        $public_consultation->trash();
 
         $this->json(['message' => 'Consulta Pública deletada com sucesso. Aguarde.']);
     }
