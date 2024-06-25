@@ -1,6 +1,17 @@
 <?php
 
+use MapasCulturais\i;
+use PublicConsultation\Entities\PublicConsultation;
+
 $this->layout = 'panel';
+
+$actives = array_filter($public_consultations, function ($value, $key) {
+    return $value->status === PublicConsultation::PUBLISHED_STATUS;
+}, ARRAY_FILTER_USE_BOTH);
+
+$inactives = array_filter($public_consultations, function ($value, $key) {
+    return $value->status === PublicConsultation::UNPUBLISHED_STATUS;
+}, ARRAY_FILTER_USE_BOTH);
 
 ?>
 
@@ -16,37 +27,30 @@ $this->layout = 'panel';
         </a>
     </header>
 
-    <?php if ($public_consultations) : ?>
-        <?php foreach ($public_consultations as $public_consultation) : ?>
-            <article class="objeto clearfix" id="public-consultation-wrapper">
-                <h1>
-                    <a href="">
-                        <?php echo $public_consultation->title; ?>
-                    </a>
-                </h1>
-                <div class="objeto-meta">
-                    <span class="label">
-                        <?php echo $public_consultation->subtitle; ?>
-                    </span>
-                </div>
-                <div class="objeto-meta">
-                    <span class="label" style="word-wrap: break-word;">
-                        <a href="<?php echo $public_consultation->googleDocsLink; ?>" target="_blank">
-                            <?php echo $public_consultation->googleDocsLink; ?>
-                        </a>
-                    </span>
-                </div>
-                <div class="entity-actions">
-                    <a class="btn btn-small btn-primary" href="<?php echo $app->createUrl('consulta-publica', 'edit', ['id' => $public_consultation->id]); ?>">
-                        editar
-                    </a>
-                    <button class="btn btn-small btn-danger" id="del-public-consultation-btn" data-public-consultation-id="<?php echo $public_consultation->id; ?>">
-                        excluir
-                    </button>
-                </div>
-            </article>
-        <?php endforeach; ?>
-    <?php else : ?>
-        <div class="alert info"><?php \MapasCulturais\i::_e("Nenhuma consulta pública cadastrada."); ?></div>
-    <?php endif; ?>
+    <ul class="abas clearfix clear">
+        <?php $this->part('tab', ['id' => 'published', 'label' => i::__("Ativas") . " (" . count($actives) . ")", 'active' => true]) ?>
+        <?php $this->part('tab', ['id' => 'unpublished', 'label' => i::__("Inativas") . " (" . count($inactives) . ")"]) ?>
+    </ul>
+
+    <div id="published">
+        <?php
+        if ($actives) {
+            foreach ($actives as $active) {
+                $this->part('consulta-publica/index-item', ['public_consultation' => $active]);
+            }
+        } else { ?>
+            <div class="alert info"><?php \MapasCulturais\i::_e("Nenhuma consulta pública ativa."); ?></div>
+        <?php } ?>
+    </div>
+
+    <div id="unpublished">
+        <?php
+        if ($inactives) {
+            foreach ($inactives as $inactive) {
+                $this->part('consulta-publica/index-item', ['public_consultation' => $inactive]);
+            }
+        } else { ?>
+            <div class="alert info"><?php \MapasCulturais\i::_e("Nenhuma consulta pública inativa."); ?></div>
+        <?php } ?>
+    </div>
 </div>

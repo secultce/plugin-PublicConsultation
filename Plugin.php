@@ -12,7 +12,7 @@ class Plugin extends \MapasCulturais\Plugin
 
         // Adiciona link de navegação no painel de controle
         $app->hook('template(<<*>>.nav.panel.accountability):after', function () {
-            $this->part('panel-nav-item');
+            $this->part('consulta-publica/panel-nav-item');
         });
 
         $app->hook('GET(consulta-publica.<<*>>):before', function () use ($app) {
