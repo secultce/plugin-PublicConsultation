@@ -104,4 +104,13 @@ class PublicConsultation extends \MapasCulturais\Controller
 
         $this->json(['message' => 'Consulta Pública deletada com sucesso. Aguarde.']);
     }
+
+    public function GET_ativas()
+    {
+        $app = App::i();
+
+        $public_consultations = $app->repo('PublicConsultation\Entities\PublicConsultation')->findBy(['status' => PublicConsultationEntity::STATUS_ENABLED], ['id' => 'desc']);
+
+        $this->json($public_consultations);
+    }
 }
