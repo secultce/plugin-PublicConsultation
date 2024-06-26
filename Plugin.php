@@ -3,6 +3,7 @@
 namespace PublicConsultation;
 
 use MapasCulturais\App;
+use PublicConsultation\Utils\Util;
 
 class Plugin extends \MapasCulturais\Plugin
 {
@@ -12,7 +13,7 @@ class Plugin extends \MapasCulturais\Plugin
 
         // Adiciona link de navegação no painel de controle
         $app->hook('template(<<*>>.nav.panel.accountability):after', function () {
-            $this->part('consulta-publica/panel-nav-item');
+            if (Util::hasPermission()) $this->part('consulta-publica/panel-nav-item');
         });
 
         $app->hook('GET(consulta-publica.<<*>>):before', function () use ($app) {
