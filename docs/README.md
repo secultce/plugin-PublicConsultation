@@ -12,6 +12,10 @@ Plugin que realiza o gerenciamento na plataforma Mapa Cultural de links para con
 
 ![db-structure](db-structure.png)
 
+### Endpoints
+
+- Retorna as consultas públicas ativas `GET /consulta-publica/ativas`
+
 ## 🚀 Instalação
 
 Instalação padrão como recomenda a [documentação](https://mapasculturais.gitbook.io/documentacao-para-desenvolvedores/formacao-para-desenvolvedores/plugins) oficial.
