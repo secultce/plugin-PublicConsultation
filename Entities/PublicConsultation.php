@@ -11,7 +11,7 @@ use MapasCulturais\App;
  * 
  * @ORM\Table(name="public_consultation")
  * @ORM\Entity
- * @ORM\entity(repositoryClass="PublicConsultation\Repositories\PublicConsultation")
+ * @ORM\entity(repositoryClass="MapasCulturais\Repository")
  */
 class PublicConsultation extends \MapasCulturais\Entity
 {
