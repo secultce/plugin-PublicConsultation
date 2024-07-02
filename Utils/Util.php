@@ -15,9 +15,7 @@ class Util
     public static function hasPermission()
     {
         $app = App::i();
-
-        $path = PLUGINS_PATH . 'PublicConsultation/.env';
-        $env = parse_ini_file($path);
+        $env = self::getEnvironmentVariables();
 
         $query = "SELECT * FROM seal_relation WHERE seal_id = :seal_id AND object_type = :object_type AND object_id = :object_id";
         $params = [
@@ -31,5 +29,13 @@ class Util
         if ($result) return true;
 
         return false;
+    }
+
+    public static function getEnvironmentVariables()
+    {
+        $path = PLUGINS_PATH . 'PublicConsultation/.env';
+        $env = parse_ini_file($path);
+
+        return $env;
     }
 }
