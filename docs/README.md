@@ -23,6 +23,7 @@ Instalação padrão como recomenda a [documentação](https://mapasculturais.gi
 - 🆙 - Acessar o container da aplicação, na pasta /var/www/scripts e rodar `./db-update`
 - Na pasta raiz, crie o arquivo `.env` baseado no arquivo `.env.example`
 - Na variável `SEAL_ID` informe o ID do selo que está atribuído aos agentes que terão permissão de executar as ações (CRUD) da consulta pública
+- Na variável `FRONT_SITE_URL` informe a URL do site onde os endpoints do plugin serão consumidos
 
 ### Observação
 

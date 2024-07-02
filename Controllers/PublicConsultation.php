@@ -108,8 +108,11 @@ class PublicConsultation extends \MapasCulturais\Controller
     public function GET_ativas()
     {
         $app = App::i();
+        $env = Util::getEnvironmentVariables();
 
         $public_consultations = $app->repo('PublicConsultation\Entities\PublicConsultation')->findBy(['status' => PublicConsultationEntity::STATUS_ENABLED], ['id' => 'desc']);
+
+        header("Access-Control-Allow-Origin: {$env["FRONT_SITE_URL"]}");
 
         $this->json($public_consultations);
     }
