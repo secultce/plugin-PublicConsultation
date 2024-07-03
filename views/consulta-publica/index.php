@@ -33,24 +33,30 @@ $inactives = array_filter($public_consultations, function ($value, $key) {
     </ul>
 
     <div id="published">
-        <?php
-        if ($actives) {
-            foreach ($actives as $active) {
-                $this->part('consulta-publica/index-item', ['public_consultation' => $active]);
-            }
-        } else { ?>
+        <?php if ($actives) : $this->part('consulta-publica/search-input', ['status' => PublicConsultation::STATUS_ENABLED]); ?>
+            <div id="published-wrapper">
+                <?php
+                foreach ($actives as $active) {
+                    $this->part('consulta-publica/index-item', ['public_consultation' => $active]);
+                }
+                ?>
+            </div>
+        <?php else : ?>
             <div class="alert info"><?php \MapasCulturais\i::_e("Nenhuma consulta pública ativa."); ?></div>
-        <?php } ?>
+        <?php endif; ?>
     </div>
 
     <div id="unpublished">
-        <?php
-        if ($inactives) {
-            foreach ($inactives as $inactive) {
-                $this->part('consulta-publica/index-item', ['public_consultation' => $inactive]);
-            }
-        } else { ?>
+        <?php if ($inactives) : $this->part('consulta-publica/search-input', ['status' => PublicConsultation::STATUS_DISABLED]); ?>
+            <div id="unpublished-wrapper">
+                <?php
+                foreach ($inactives as $inactive) {
+                    $this->part('consulta-publica/index-item', ['public_consultation' => $inactive]);
+                }
+                ?>
+            </div>
+        <?php else : ?>
             <div class="alert info"><?php \MapasCulturais\i::_e("Nenhuma consulta pública inativa."); ?></div>
-        <?php } ?>
+        <?php endif; ?>
     </div>
 </div>
