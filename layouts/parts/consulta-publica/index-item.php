@@ -1,8 +1,6 @@
 <article class="objeto clearfix" id="public-consultation-wrapper">
     <h1>
-        <a href="">
-            <?php echo $public_consultation->title; ?>
-        </a>
+        <?php echo $public_consultation->title; ?>
     </h1>
     <div class="objeto-meta">
         <span class="label">
