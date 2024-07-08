@@ -1,31 +1,31 @@
 const publicConsultation = {
     researchText: '',
     mountSearchResult(searchResult) {
-        const html = searchResult.map(value => {
+        const html = searchResult.map(publicConsultation => {
             return `
                 <article class="objeto clearfix" id="public-consultation-wrapper">
                     <h1>
                         <a href="">
-                            ${value.title}
+                            ${publicConsultation.title}
                         </a>
                     </h1>
                     <div class="objeto-meta">
                         <span class="label">
-                            ${value.subtitle}
+                            ${publicConsultation.subtitle}
                         </span>
                     </div>
                     <div class="objeto-meta">
                         <span class="label" style="word-wrap: break-word;">
-                            <a href="${value.google_docs_link}" target="_blank">
-                                ${value.google_docs_link}
+                            <a href="${publicConsultation.google_docs_link}" target="_blank">
+                                ${publicConsultation.google_docs_link}
                             </a>
                         </span>
                     </div>
                     <div class="entity-actions">
-                        <a class="btn btn-small btn-primary" href="${MapasCulturais.createUrl('consulta-publica', 'edit', { 'id': value.id })}">
+                        <a class="btn btn-small btn-primary" href="${MapasCulturais.createUrl('consulta-publica', 'edit', { 'id': publicConsultation.id })}">
                             editar
                         </a>
-                        <button class="btn btn-small btn-danger" del-public-consultation-btn data-public-consultation-id="${value.id}">
+                        <button class="btn btn-small btn-danger" del-public-consultation-btn data-public-consultation-id="${publicConsultation.id}">
                             excluir
                         </button>
                     </div>
@@ -33,6 +33,12 @@ const publicConsultation = {
         }).join('')
 
         return html
+    },
+    showSearchResult(statusLabel, searchHtml) {
+        $(`#${statusLabel}-wrapper`).empty()
+        $(`#${statusLabel}-wrapper`).html(searchHtml)
+
+        $('#spinner-search').addClass('d-none')
     }
 }
 
@@ -90,10 +96,7 @@ $(() => {
                         successAlert(res.message)
                     },
                     error() {
-                        const message = 'Ocorreu algum erro. Verifique e tente novamente.'
-                        const cssClass = 'danger'
-
-                        errorAlert(message, cssClass)
+                        defaultErrorMessage()
                     }
                 })
             }
@@ -105,6 +108,7 @@ $(() => {
         const keyCode = event.keyCode
         if (event.ctrlKey || (keyCode >= 9 && keyCode <= 45) || (keyCode >= 91 && keyCode <= 93) || (keyCode >= 112 && keyCode <= 145)) return
 
+        // Remove todos os eventos do input para que não aconteça requisição a cada digitação
         $(this).each(function () {
             $(this).data('events', $.extend(true, {}, $._data(this, 'events')))
         })
@@ -119,6 +123,7 @@ $(() => {
             publicConsultation.researchText = $(this).val()
 
             if (publicConsultation.researchText.length) {
+                // Se tiver texto no input, retorna o resultado da consulta baseado no texto
                 $.ajax({
                     type: "GET",
                     url: MapasCulturais.createUrl('consulta-publica', 'search'),
@@ -128,19 +133,19 @@ $(() => {
                     },
                     dataType: "json",
                     success(res) {
-                        const notFoundElement = '<h4 style="text-align: center; margin: 40px 0 0;">Pesquisa não encontrada</h4>'
+                        const notFoundElement = '<h4 class="search-not-found">Pesquisa não encontrada</h4>'
                         const searchHtml = res.length ? publicConsultation.mountSearchResult(res) : notFoundElement
 
-                        $(`#${statusLabel}-wrapper`).empty()
-                        $(`#${statusLabel}-wrapper`).html(searchHtml)
-
-                        $('#spinner-search').addClass('d-none')
+                        publicConsultation.showSearchResult(statusLabel, searchHtml)
                     },
                     error() {
-                        // 
+                        $('#spinner-search').addClass('d-none')
+
+                        defaultErrorMessage()
                     }
                 })
             } else {
+                // Caso o input seja esvaziado, a busca retornará todas as consultas públicas daquele status
                 $.ajax({
                     type: "GET",
                     url: MapasCulturais.createUrl('consulta-publica', 'allByStatus'),
@@ -151,17 +156,17 @@ $(() => {
                     success(res) {
                         const searchHtml = publicConsultation.mountSearchResult(res)
 
-                        $(`#${statusLabel}-wrapper`).empty()
-                        $(`#${statusLabel}-wrapper`).html(searchHtml)
-
-                        $('#spinner-search').addClass('d-none')
+                        publicConsultation.showSearchResult(statusLabel, searchHtml)
                     },
                     error() {
-                        // 
+                        $('#spinner-search').addClass('d-none')
+
+                        defaultErrorMessage()
                     }
                 })
             }
 
+            // Adiciona os eventos novamente ao input
             $(this).each(function () {
                 let $self = $(this)
                 $.each($(this).data('events'), function (_, e) {
@@ -214,4 +219,11 @@ const getData = (event) => {
     }
 
     return data
+}
+
+const defaultErrorMessage = () => {
+    const message = 'Ocorreu algum erro. Verifique e tente novamente.'
+    const cssClass = 'danger'
+
+    errorAlert(message, cssClass)
 }

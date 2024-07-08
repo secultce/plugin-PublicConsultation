@@ -27,3 +27,8 @@
     display: flex;
     justify-content: flex-start;
 }
+
+.search-not-found {
+    text-align: center;
+    margin: 40px 0 0;
+}

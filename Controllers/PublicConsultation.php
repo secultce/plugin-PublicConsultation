@@ -119,6 +119,8 @@ class PublicConsultation extends \MapasCulturais\Controller
 
     public function GET_search()
     {
+        $this->requireAuthentication();
+
         $app = App::i();
 
         $status = (int) $this->data["status"];
@@ -137,6 +139,8 @@ class PublicConsultation extends \MapasCulturais\Controller
 
     public function GET_allByStatus()
     {
+        $this->requireAuthentication();
+
         $app = App::i();
 
         $status = (int) $this->data["status"];
