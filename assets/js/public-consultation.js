@@ -14,6 +14,7 @@ const publicConsultation = {
                 const searchHtml = res.length ? publicConsultation.mountSearchResult(res) : notFoundElement
 
                 publicConsultation.showSearchResult(statusLabel, searchHtml)
+                publicConsultation.trash()
             },
             error() {
                 $('#spinner-search').addClass('d-none')
@@ -34,6 +35,7 @@ const publicConsultation = {
                 const searchHtml = publicConsultation.mountSearchResult(res)
 
                 publicConsultation.showSearchResult(statusLabel, searchHtml)
+                publicConsultation.trash()
             },
             error() {
                 $('#spinner-search').addClass('d-none')
@@ -79,6 +81,37 @@ const publicConsultation = {
         $(`#${statusLabel}-wrapper`).html(searchHtml)
 
         $('#spinner-search').addClass('d-none')
+    },
+    trash() {
+        $('[del-public-consultation-btn]').on('click', (event) => {
+            Swal.fire({
+                title: "Deletar Consulta Pública?",
+                text: "Essa ação não poderá ser desfeita.",
+                showCancelButton: true,
+                cancelButtonText: "Cancelar",
+                confirmButtonText: "Confirmar",
+                reverseButtons: true
+            }).then(res => {
+                if (res.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: MapasCulturais.createUrl('consulta-publica', 'trash'),
+                        data: {
+                            id: event.currentTarget.dataset.publicConsultationId
+                        },
+                        dataType: "json",
+                        success(res) {
+                            $(event.currentTarget).parents('#public-consultation-wrapper').remove()
+
+                            successAlert(res.message)
+                        },
+                        error() {
+                            defaultErrorMessage()
+                        }
+                    })
+                }
+            })
+        })
     }
 }
 
@@ -127,35 +160,7 @@ $(() => {
         })
     })
 
-    $('[del-public-consultation-btn]').on('click', (event) => {
-        Swal.fire({
-            title: "Deletar Consulta Pública?",
-            text: "Essa ação não poderá ser desfeita.",
-            showCancelButton: true,
-            cancelButtonText: "Cancelar",
-            confirmButtonText: "Confirmar",
-            reverseButtons: true
-        }).then(res => {
-            if (res.isConfirmed) {
-                $.ajax({
-                    type: "POST",
-                    url: MapasCulturais.createUrl('consulta-publica', 'trash'),
-                    data: {
-                        id: event.currentTarget.dataset.publicConsultationId
-                    },
-                    dataType: "json",
-                    success(res) {
-                        $(event.currentTarget).parents('#public-consultation-wrapper').remove()
-
-                        successAlert(res.message)
-                    },
-                    error() {
-                        defaultErrorMessage()
-                    }
-                })
-            }
-        })
-    })
+    publicConsultation.trash()
 
     $('[search-input]').on({
         keydown(event) {
