@@ -13,3 +13,22 @@
     width: 100%;
     margin-bottom: 10px;
 }
+
+.d-none {
+    display: none;
+}
+
+.spinner-search {
+    width: 30px;
+    margin-left: 7px;
+}
+
+.search-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.search-not-found {
+    text-align: center;
+    margin: 40px 0 0;
+}

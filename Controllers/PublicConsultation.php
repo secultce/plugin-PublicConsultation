@@ -17,7 +17,7 @@ class PublicConsultation extends \MapasCulturais\Controller
 
         if (!Util::hasPermission()) $app->redirect($app->createUrl('panel'));
 
-        $public_consultations = $app->repo('PublicConsultation\Entities\PublicConsultation')->findBy([], ['id' => 'desc']);
+        $public_consultations = $app->repo(PublicConsultationEntity::class)->findBy([], ['id' => 'desc']);
 
         $this->render('index', ['public_consultations' => $public_consultations]);
     }
@@ -60,7 +60,7 @@ class PublicConsultation extends \MapasCulturais\Controller
         $app = App::i();
 
         $id = (int) $this->data["id"];
-        $public_consultation = current($app->repo('PublicConsultation\Entities\PublicConsultation')->findBy(['id' => $id]));
+        $public_consultation = current($app->repo(PublicConsultationEntity::class)->findBy(['id' => $id]));
 
         if (!Util::hasPermission()) throw new PermissionDenied($app->user, $public_consultation, 'edit');
 
@@ -80,7 +80,7 @@ class PublicConsultation extends \MapasCulturais\Controller
         }
 
         $id = (int) $data["id"];
-        $public_consultation = current($app->repo('PublicConsultation\Entities\PublicConsultation')->findBy(['id' => $id]));
+        $public_consultation = current($app->repo(PublicConsultationEntity::class)->findBy(['id' => $id]));
 
         if (!Util::hasPermission()) throw new PermissionDenied($app->user, $public_consultation, 'update');
 
@@ -96,7 +96,7 @@ class PublicConsultation extends \MapasCulturais\Controller
         $app = App::i();
 
         $id = (int) $this->data["id"];
-        $public_consultation = current($app->repo('PublicConsultation\Entities\PublicConsultation')->findBy(['id' => $id]));
+        $public_consultation = current($app->repo(PublicConsultationEntity::class)->findBy(['id' => $id]));
 
         if (!Util::hasPermission()) throw new PermissionDenied($app->user, $public_consultation, 'trash');
 
@@ -110,10 +110,48 @@ class PublicConsultation extends \MapasCulturais\Controller
         $app = App::i();
         $env = Util::getEnvironmentVariables();
 
-        $public_consultations = $app->repo('PublicConsultation\Entities\PublicConsultation')->findBy(['status' => PublicConsultationEntity::STATUS_ENABLED], ['id' => 'desc']);
+        $public_consultations = $app->repo(PublicConsultationEntity::class)->findBy(['status' => PublicConsultationEntity::STATUS_ENABLED], ['id' => 'desc']);
 
         header("Access-Control-Allow-Origin: {$env["FRONT_SITE_URL"]}");
 
         $this->json($public_consultations);
+    }
+
+    public function GET_search()
+    {
+        $this->requireAuthentication();
+
+        $app = App::i();
+
+        $status = (int) $this->data["status"];
+        $text = $this->data["text"];
+
+        $query = "SELECT * FROM public_consultation WHERE status = :status AND title ILIKE :text ORDER BY id DESC";
+        $params = [
+            "status" => $status,
+            "text" => "%$text%",
+        ];
+        $conn = $app->em->getConnection();
+        $search_result = $conn->fetchAllAssociative($query, $params);
+
+        $this->json($search_result);
+    }
+
+    public function GET_allByStatus()
+    {
+        $this->requireAuthentication();
+
+        $app = App::i();
+
+        $status = (int) $this->data["status"];
+
+        $query = "SELECT * FROM public_consultation WHERE status = :status ORDER BY id DESC";
+        $params = [
+            "status" => $status,
+        ];
+        $conn = $app->em->getConnection();
+        $search_result = $conn->fetchAllAssociative($query, $params);
+
+        $this->json($search_result);
     }
 }

@@ -1,3 +1,101 @@
+const publicConsultation = {
+    researchText: '',
+    search(status, statusLabel) {
+        $.ajax({
+            type: "GET",
+            url: MapasCulturais.createUrl('consulta-publica', 'search'),
+            data: {
+                status,
+                text: this.researchText,
+            },
+            dataType: "json",
+            success(res) {
+                const notFoundElement = '<h4 class="search-not-found">Pesquisa não encontrada</h4>'
+                const searchHtml = res.length ? publicConsultation.mountSearchResult(res) : notFoundElement
+
+                publicConsultation.showSearchResult(statusLabel, searchHtml)
+            },
+            error() {
+                $('#spinner-search').addClass('d-none')
+
+                defaultErrorMessage()
+            }
+        })
+    },
+    getAllByStatus(status, statusLabel) {
+        $.ajax({
+            type: "GET",
+            url: MapasCulturais.createUrl('consulta-publica', 'allByStatus'),
+            data: {
+                status,
+            },
+            dataType: "json",
+            success(res) {
+                const searchHtml = publicConsultation.mountSearchResult(res)
+
+                publicConsultation.showSearchResult(statusLabel, searchHtml)
+            },
+            error() {
+                $('#spinner-search').addClass('d-none')
+
+                defaultErrorMessage()
+            }
+        })
+    },
+    mountSearchResult(searchResult) {
+        const html = searchResult.map(publicConsultation => {
+            return `
+                <article class="objeto clearfix" id="public-consultation-wrapper">
+                    <h1>
+                        ${publicConsultation.title}
+                    </h1>
+                    <div class="objeto-meta">
+                        <span class="label">
+                            ${publicConsultation.subtitle}
+                        </span>
+                    </div>
+                    <div class="objeto-meta">
+                        <span class="label" style="word-wrap: break-word;">
+                            <a href="${publicConsultation.google_docs_link}" target="_blank">
+                                ${publicConsultation.google_docs_link}
+                            </a>
+                        </span>
+                    </div>
+                    <div class="entity-actions">
+                        <a class="btn btn-small btn-primary" href="${MapasCulturais.createUrl('consulta-publica', 'edit', { 'id': publicConsultation.id })}">
+                            editar
+                        </a>
+                        <button class="btn btn-small btn-danger" del-public-consultation-btn data-public-consultation-id="${publicConsultation.id}">
+                            excluir
+                        </button>
+                    </div>
+                </article>`
+        }).join('')
+
+        return html
+    },
+    showSearchResult(statusLabel, searchHtml) {
+        $(`#${statusLabel}-wrapper`).empty()
+        $(`#${statusLabel}-wrapper`).html(searchHtml)
+
+        $('#spinner-search').addClass('d-none')
+    }
+}
+
+const utils = {
+    ctrlKeyPressed: false,
+    ignoreKeys(event) {
+        const keyCode = event.keyCode
+        if (
+            (this.ctrlKeyPressed && event.key !== 'v') ||
+            (event.key === 'Backspace' && !publicConsultation.researchText.length) ||
+            (keyCode >= 9 && keyCode <= 45) ||
+            (keyCode >= 91 && keyCode <= 93) ||
+            (keyCode >= 112 && keyCode <= 145)
+        ) return true
+    }
+}
+
 $(() => {
     $('#create-public-consultation-form, #edit-public-consultation-form').on('submit', event => {
         event.preventDefault()
@@ -52,14 +150,54 @@ $(() => {
                         successAlert(res.message)
                     },
                     error() {
-                        const message = 'Ocorreu algum erro. Verifique e tente novamente.'
-                        const cssClass = 'danger'
-
-                        errorAlert(message, cssClass)
+                        defaultErrorMessage()
                     }
                 })
             }
         })
+    })
+
+    $('[search-input]').on({
+        keydown(event) {
+            if (event.key === 'Control') utils.ctrlKeyPressed = true
+        },
+        keyup(event) {
+            if (event.key === 'Control') utils.ctrlKeyPressed = false
+
+            // Ignora algumas teclas (tab, shift, ctrl) para que não seja feita requisição ao clicá-las
+            if (utils.ignoreKeys(event)) return
+
+            // Remove todos os eventos do input para que não aconteça requisição a cada digitação
+            $(this).each(function () {
+                $(this).data('events', $.extend(true, {}, $._data(this, 'events')))
+            })
+            $(this).off()
+
+            $('#spinner-search').removeClass('d-none')
+
+            // Espera 1 segundo após a digitação para realizar a requisição
+            setTimeout(() => {
+                const status = parseInt(event.currentTarget.dataset.status)
+                const statusLabel = status === 1 ? 'published' : 'unpublished'
+                publicConsultation.researchText = $(this).val()
+
+                if (publicConsultation.researchText.length) {
+                    // Se tiver texto no input, retorna o resultado da consulta baseado no texto
+                    publicConsultation.search(status, statusLabel)
+                } else {
+                    // Caso o input seja esvaziado, a busca retornará todas as consultas públicas daquele status
+                    publicConsultation.getAllByStatus(status, statusLabel)
+                }
+
+                // Adiciona os eventos novamente ao input
+                $(this).each(function () {
+                    let $self = $(this)
+                    $.each($(this).data('events'), function (_, e) {
+                        $self.on(e[0].type, e[0].handler)
+                    })
+                })
+            }, 1000)
+        }
     })
 })
 
@@ -105,4 +243,11 @@ const getData = (event) => {
     }
 
     return data
+}
+
+const defaultErrorMessage = () => {
+    const message = 'Ocorreu algum erro. Verifique e tente novamente.'
+    const cssClass = 'danger'
+
+    errorAlert(message, cssClass)
 }
