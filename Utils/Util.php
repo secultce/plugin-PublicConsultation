@@ -33,8 +33,13 @@ class Util
 
     public static function getEnvironmentVariables()
     {
-        $path = PLUGINS_PATH . 'PublicConsultation/.env';
-        $env = parse_ini_file($path);
+        $env_file = PLUGINS_PATH . 'PublicConsultation/.env';
+        $env_file_example = PLUGINS_PATH . 'PublicConsultation/.env.example';
+        $env = parse_ini_file($env_file_example);
+
+        if (file_exists($env_file)) {
+            $env = parse_ini_file($env_file);
+        }
 
         return $env;
     }
