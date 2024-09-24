@@ -21,9 +21,9 @@ Plugin que realiza o gerenciamento na plataforma Mapa Cultural de links para con
 Instalação padrão como recomenda a [documentação](https://mapasculturais.gitbook.io/documentacao-para-desenvolvedores/formacao-para-desenvolvedores/plugins) oficial.
 
 - 🆙 - Acessar o container da aplicação, na pasta /var/www/scripts e rodar `./db-update`
-- Na pasta raiz, crie o arquivo `.env` baseado no arquivo `.env.example`
-- Na variável `SEAL_ID` informe o ID do selo que está atribuído aos agentes que terão permissão de executar as ações (CRUD) da consulta pública
-- Na variável `FRONT_SITE_URL` informe a URL do site onde os endpoints do plugin serão consumidos
+- Adicione no arquivo docker-compose do projeto base as variáveis de ambiente `SECULT_SEAL_ID` e `URL_SITE_EDITAIS`
+- Na variável `SECULT_SEAL_ID` informe o ID do selo que está atribuído aos agentes que terão permissão de executar as ações (CRUD) da consulta pública
+- Na variável `URL_SITE_EDITAIS` informe a URL do site onde os endpoints do plugin serão consumidos
 
 ### Observação
 
